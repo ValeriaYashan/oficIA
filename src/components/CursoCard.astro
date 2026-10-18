@@ -1,0 +1,26 @@
+---
+import Icono from './Icono.astro';
+import { fechaCorta, type Curso } from '../data/cursos';
+const { curso } = Astro.props as { curso: Curso };
+const clases: Record<string, string> = {
+  'Electricidad': 'a-electricidad', 'Plomería y gas': 'a-plomeria', 'Soldadura': 'a-soldadura',
+  'Carpintería': 'a-carpinteria', 'Refrigeración': 'a-refrigeracion', 'Construcción': 'a-construccion', 'Gestión con IA': 'a-ia',
+};
+---
+<article class="curso" data-oficio={curso.oficio} data-modalidad={curso.modalidad}>
+  <div class={`curso-arte ${clases[curso.oficio]}`}>
+    <span class="etiqueta">{curso.modalidad}</span>
+    <Icono oficio={curso.oficio} />
+  </div>
+  <div class="curso-cuerpo">
+    <h3>{curso.nombre}</h3>
+    <p>{curso.resumen}</p>
+    <ul class="meta">
+      <li><b>Duración</b> {curso.duracion_semanas} semanas · {curso.carga_horaria} h</li>
+      <li><b>Inicio</b> {fechaCorta(curso.proxima_fecha_inicio)}</li>
+      <li><b>Horario</b> {curso.dias_horarios}</li>
+    </ul>
+    <span class="cupo">Quedan {curso.lugares_disponibles} lugares de {curso.cupo}</span>
+    <a class="btn btn-borde btn-chico" href={`/cursos/${curso.slug}`}>Ver programa</a>
+  </div>
+</article>

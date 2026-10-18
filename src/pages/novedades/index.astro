@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import { NOTAS, CATEGORIAS_NOTAS } from '../../data/notas';
+---
+<Base
+  titulo="Novedades y notas útiles para oficios | OficIA"
+  descripcion="Notas prácticas sobre oficios, herramientas, seguridad y cómo conseguir clientes, escritas por nuestro equipo docente."
+>
+  <section class="cabecera">
+    <div class="wrap">
+      <h1>Novedades</h1>
+      <p class="lead">Notas cortas y útiles para quienes trabajan o quieren trabajar en un oficio.</p>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="wrap">
+      <div class="filtros">
+        <div class="chips" id="chips-cat">
+          <span class="rotulo">Categoría</span>
+          <button class="chip" type="button" data-valor="" aria-pressed="true">Todas</button>
+          {CATEGORIAS_NOTAS.map((c) => <button class="chip" type="button" data-valor={c} aria-pressed="false">{c}</button>)}
+        </div>
+      </div>
+      <div class="notas" id="notas">
+        {NOTAS.map((n) => (
+          <article class="nota" data-cat={n.categoria}>
+            <span class="cat">{n.categoria}</span>
+            <h3><a href={`/novedades/${n.slug}`}>{n.titulo}</a></h3>
+            <p>{n.resumen}</p>
+            <a class="mas" href={`/novedades/${n.slug}`}>Leer nota →</a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const chips = document.getElementById('chips-cat');
+    const notas = Array.from(document.querySelectorAll<HTMLElement>('#notas .nota'));
+    chips?.addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest('.chip') as HTMLButtonElement | null;
+      if (!b) return;
+      chips.querySelectorAll('.chip').forEach((x) => x.setAttribute('aria-pressed', 'false'));
+      b.setAttribute('aria-pressed', 'true');
+      const v = b.dataset.valor ?? '';
+      notas.forEach((n) => { n.style.display = !v || n.dataset.cat === v ? '' : 'none'; });
+    });
+  </script>
+</Base>

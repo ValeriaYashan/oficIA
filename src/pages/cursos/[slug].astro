@@ -1,0 +1,83 @@
+---
+import Base from '../../layouts/Base.astro';
+import Formulario from '../../components/Formulario.astro';
+import CursoCard from '../../components/CursoCard.astro';
+import { CURSOS, FAQ_CURSOS, fechaLarga, type Curso } from '../../data/cursos';
+
+export function getStaticPaths() {
+  return CURSOS.map((curso) => ({ params: { slug: curso.slug }, props: { curso } }));
+}
+const { curso } = Astro.props as { curso: Curso };
+const relacionados = CURSOS.filter((c) => c.slug !== curso.slug && c.oficio !== curso.oficio).slice(0, 3);
+---
+<Base
+  titulo={`${curso.nombre} | OficIA`}
+  descripcion={`${curso.resumen} ${curso.duracion_semanas} semanas, ${curso.carga_horaria} h, ${curso.modalidad.toLowerCase()}. Inicio ${fechaLarga(curso.proxima_fecha_inicio)}.`}
+>
+  <section class="cabecera">
+    <div class="wrap">
+      <p class="migas"><a href="/cursos">Cursos</a> / {curso.oficio}</p>
+      <h1>{curso.nombre}</h1>
+      <p class="lead">{curso.resumen}</p>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="wrap ficha">
+      <div>
+        <h2>Dirigido a</h2>
+        <p>{curso.dirigido_a}</p>
+
+        <h2>Programa</h2>
+        <ol>{curso.programa.map((p) => <li>{p.replace(/^(Módulo|Clase) \d+, /, '').replace(/^./, (x) => x.toUpperCase())}</li>)}</ol>
+
+        <div class="caja-ia">
+          <h3>Módulo de IA aplicada</h3>
+          <p>{curso.modulo_ia}</p>
+        </div>
+
+        <h2>Requisitos</h2>
+        <p>{curso.requisitos}</p>
+
+        <h2>Docente</h2>
+        <div class="docente"><b>{curso.docente_nombre}</b>{curso.docente_bio}</div>
+
+        <h2>Preguntas frecuentes</h2>
+        <div class="faq" style="margin-top:0">
+          {FAQ_CURSOS.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+        </div>
+      </div>
+
+      <aside class="lateral">
+        <dl>
+          <div><dt>Próxima fecha de inicio</dt><dd>{fechaLarga(curso.proxima_fecha_inicio)}</dd></div>
+          <div><dt>Días y horarios</dt><dd>{curso.dias_horarios}</dd></div>
+          <div><dt>Duración</dt><dd>{curso.duracion_semanas} semanas · {curso.carga_horaria} horas</dd></div>
+          <div><dt>Modalidad</dt><dd>{curso.modalidad}</dd></div>
+          <div><dt>Cupo</dt><dd>{curso.cupo} personas · quedan {curso.lugares_disponibles} lugares</dd></div>
+          <div><dt>Certificación</dt><dd>{curso.certificacion}</dd></div>
+          <div><dt>Arancel</dt><dd>{curso.arancel_referencia}</dd></div>
+        </dl>
+        <a class="btn btn-primario" href="#reservar">Quiero inscribirme</a>
+      </aside>
+    </div>
+  </section>
+
+  <section class="seccion oscura" id="reservar">
+    <div class="wrap cierre-form">
+      <div>
+        <p class="eyebrow">Inscripción</p>
+        <h2>Reservá tu lugar en {curso.nombre}</h2>
+        <p class="lead">Dejá tus datos y te escribimos en menos de 48 horas hábiles con fechas, aranceles y los pasos para reservar.</p>
+      </div>
+      <Formulario cursoPreseleccionado={curso.nombre} />
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="wrap">
+      <h2>Otros cursos</h2>
+      <div class="grilla">{relacionados.map((c) => <CursoCard curso={c} />)}</div>
+    </div>
+  </section>
+</Base>

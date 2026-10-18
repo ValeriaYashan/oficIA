@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+const equipo = [
+  ['Ing. Roberto Pizarro', 'Electricista matriculado con 25 años de obra, a cargo de Electricidad domiciliaria.'],
+  ['Marcela Ibáñez', 'Instaladora de gas y plomera con 18 años de experiencia, a cargo de Plomería y gas.'],
+  ['Hugo Benítez', 'Soldador calificado con experiencia en metalmecánica, a cargo de Soldadura.'],
+  ['Claudia Ferreyra', 'Carpintera y diseñadora de muebles, a cargo de Carpintería.'],
+  ['Néstor Domínguez', 'Técnico en refrigeración, a cargo de Refrigeración y aire acondicionado.'],
+  ['Alejandro Vera', 'Maestro mayor de obras, a cargo de Albañilería y construcción en seco.'],
+  ['Valeria Yashan', 'Consultora en gestión de proyectos e IA aplicada, a cargo de IA para presupuestar y conseguir clientes.'],
+];
+const iniciales = (n: string) => n.replace(/^Ing\. /, '').split(' ').map((p) => p[0]).slice(0, 2).join('');
+---
+<Base
+  titulo="Quiénes somos | OficIA"
+  descripcion="Conocé a OficIA, instituto de oficios con práctica en taller, docentes en actividad e IA aplicada al trabajo."
+>
+  <section class="cabecera">
+    <div class="wrap">
+      <h1>Formamos profesionales que saben hacer y saben ofrecer su trabajo</h1>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="wrap">
+      <p class="lead" style="max-width:70ch">OficIA nació en 2015 con una idea simple: que aprender un oficio no sea solo mirar cómo se hace, sino hacerlo, con las herramientas reales y con alguien que lo hace todos los días. Con los años vimos que muchos buenos oficiales perdían trabajo no por falta de técnica, sino por falta de herramientas para presupuestar, comunicarse y organizarse. Por eso sumamos la IA aplicada como parte de cada cursada.</p>
+
+      <h2 style="margin-top:56px">Nuestro método</h2>
+      <ul class="metodo">
+        <li>El 70 % de cada curso es práctica en taller.</li>
+        <li>Grupos reducidos de hasta 20 personas.</li>
+        <li>Evaluación por trabajos reales, no solo por examen.</li>
+        <li>Un módulo de IA aplicada en cada oficio.</li>
+        <li>Acompañamiento después del certificado a través de la bolsa de trabajo.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="seccion clara">
+    <div class="wrap">
+      <h2>Equipo docente</h2>
+      <div class="equipo">
+        {equipo.map(([n, d]) => <div class="persona"><div class="avatar">{iniciales(n)}</div><b>{n}</b><span>{d}</span></div>)}
+      </div>
+      <p class="nota-demo" style="margin-top:18px">Equipo ficticio de un proyecto de demostración.</p>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="wrap" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:40px">
+      <div>
+        <h2>Instalaciones</h2>
+        <p>Taller de 600 m² con puestos individuales, sala de teoría y espacio de seguridad e higiene.</p>
+        <p class="nota-demo">Descripción de ejemplo.</p>
+      </div>
+      <div>
+        <h2>Convenios</h2>
+        <p>Bolsa de trabajo con ferreterías, empresas de mantenimiento y estudios de arquitectura de la zona.</p>
+        <p class="nota-demo">Ejemplo ilustrativo.</p>
+      </div>
+    </div>
+  </section>
+</Base>

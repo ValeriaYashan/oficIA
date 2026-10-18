@@ -1,0 +1,78 @@
+---
+import '../styles/global.css';
+import { SITE, MENU, waLink } from '../data/site';
+const { titulo, descripcion, ruta = Astro.url.pathname } = Astro.props;
+const actual = ruta.replace(/\/$/, '') || '/';
+const canonical = new URL(actual, SITE.url).toString();
+const esActivo = (href: string) => (href === '/' ? actual === '/' : actual === href || actual.startsWith(href + '/'));
+---
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo}</title>
+    <meta name="description" content={descripcion} />
+    <link rel="canonical" href={canonical} />
+    {!SITE.indexar && <meta name="robots" content="noindex, nofollow" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="es_AR" />
+    <meta name="theme-color" content="#1d2125" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="wrap">
+        <a class="logo" href="/" aria-label="OficIA, inicio">Ofic<span>IA</span></a>
+        <button class="menu-toggle" aria-expanded="false" aria-controls="nav">Menú</button>
+        <nav class="nav" id="nav" aria-label="Principal">
+          {MENU.map((m) => <a href={m.href} aria-current={esActivo(m.href) ? 'page' : undefined}>{m.label}</a>)}
+          <a class="btn btn-primario btn-chico" href="/contacto">Inscribirme</a>
+        </nav>
+      </div>
+    </header>
+
+    <main><slot /></main>
+
+    <footer class="footer">
+      <div class="wrap">
+        <div class="footer-grid">
+          <div>
+            <a class="logo" href="/">Ofic<span>IA</span></a>
+            <p style="margin-top:10px">{SITE.lema}</p>
+          </div>
+          <div>
+            <h4>Sitio</h4>
+            <ul>
+              {MENU.map((m) => <li><a href={m.href}>{m.label}</a></li>)}
+              <li><a href="/privacidad">Privacidad</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Contacto</h4>
+            <ul>
+              <li><a href={waLink('Hola, quiero consultar por los cursos de OficIA')} rel="noopener" target="_blank">WhatsApp</a></li>
+              <li>{SITE.horarios}</li>
+            </ul>
+          </div>
+        </div>
+        <p class="aviso">{SITE.aviso}</p>
+      </div>
+    </footer>
+
+    <script>
+      const b = document.querySelector('.menu-toggle');
+      const n = document.getElementById('nav');
+      b?.addEventListener('click', () => {
+        const abierto = n?.classList.toggle('abierto');
+        b.setAttribute('aria-expanded', String(!!abierto));
+      });
+    </script>
+  </body>
+</html>

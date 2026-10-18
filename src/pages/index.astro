@@ -1,0 +1,121 @@
+---
+import Base from '../layouts/Base.astro';
+import CursoCard from '../components/CursoCard.astro';
+import Formulario from '../components/Formulario.astro';
+import Icono from '../components/Icono.astro';
+import { CURSOS, OFICIOS } from '../data/cursos';
+import { waLink } from '../data/site';
+
+const faq = [
+  { q: '¿Necesito experiencia previa?', a: 'No. Los cursos de iniciación parten desde cero. Cada ficha indica los requisitos.' },
+  { q: '¿Los cursos son presenciales?', a: 'La práctica es presencial en taller. Algunos contenidos teóricos y el módulo de IA se dictan en modalidad online en vivo, según el curso.' },
+  { q: '¿Entregan certificado?', a: 'Sí, un certificado de finalización de OficIA. Consultá la normativa vigente si tu oficio requiere matrícula habilitante, porque el certificado de un curso no la reemplaza.' },
+  { q: '¿Puedo pagar en cuotas?', a: 'Sí, hay planes de pago. Los consultás al inscribirte.' },
+  { q: '¿Qué herramientas tengo que llevar?', a: 'Las herramientas de taller las ponemos nosotros. Cada curso indica el equipo de seguridad personal que necesitás.' },
+];
+---
+<Base
+  titulo="OficIA | Cursos de oficios con práctica en taller e IA aplicada"
+  descripcion="Aprendé electricidad, plomería y gas, soldadura, carpintería, refrigeración y construcción con práctica en taller, docentes en actividad e IA aplicada a tu trabajo."
+>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Instituto de oficios</p>
+        <h1>Aprendé un oficio con las manos y trabajá mejor con <em>IA</em></h1>
+        <p class="lead">Cursos presenciales con práctica en taller, docentes en actividad e IA aplicada a tu trabajo.</p>
+        <div class="hero-botones">
+          <a class="btn btn-primario" href="/contacto">Inscribirme</a>
+          <a class="btn btn-borde" href="/cursos">Ver cursos</a>
+        </div>
+        <small>Próximas cursadas desde marzo de 2027. Cupos limitados.</small>
+      </div>
+      <div class="hero-arte" aria-hidden="true">
+        {OFICIOS.slice(0, 6).map((o, i) => <div class={i === 4 ? 'na' : ''}><Icono oficio={o} /></div>)}
+      </div>
+    </div>
+    <div class="numeros">
+      <div class="wrap">
+        <div class="numero"><strong>1.200</strong><span>egresados desde 2015</span></div>
+        <div class="numero"><strong>7</strong><span>cursos</span></div>
+        <div class="numero"><strong>70 %</strong><span>de la cursada es práctica en taller</span></div>
+        <div class="numero"><strong>85 %</strong><span>de los egresados trabajando en su oficio a los seis meses</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="wrap">
+      <p class="eyebrow">Cursos</p>
+      <h2>Elegí tu oficio</h2>
+      <p class="lead">Cada curso combina técnica de taller con herramientas de IA para presupuestar, diagnosticar y conseguir clientes. Elegí el oficio y mirá fechas, programa y requisitos.</p>
+      <div class="grilla">
+        {CURSOS.map((c) => <CursoCard curso={c} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion clara">
+    <div class="wrap">
+      <p class="eyebrow">Método</p>
+      <h2>Cómo es cursar en OficIA</h2>
+      <div class="pasos">
+        <div class="paso"><h3>Te inscribís</h3><p>Completás el formulario, hablamos con vos y reservás tu lugar.</p></div>
+        <div class="paso"><h3>Aprendés haciendo</h3><p>Cada clase arranca con una explicación corta y sigue con práctica en el taller, con herramientas reales y supervisión del docente.</p></div>
+        <div class="paso"><h3>Te certificás y salís a trabajar</h3><p>Recibís tu certificado de finalización y acceso a nuestra bolsa de trabajo con empresas y profesionales de la zona.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion oscura">
+    <div class="wrap bloque-ia">
+      <div>
+        <p class="eyebrow">IA para tu oficio</p>
+        <h2>Lo que otros cursos de oficios no enseñan</h2>
+        <p class="lead">Un buen oficio ya no alcanza si no sabés presupuestar rápido, explicarle bien el trabajo a un cliente y organizar tu agenda. En cada curso incluimos un módulo de IA aplicada: armar presupuestos claros, redactar propuestas, diagnosticar fallas con apoyo de asistentes y ordenar tu emprendimiento. Sin tecnicismos y con ejemplos de tu propio rubro.</p>
+        <a class="btn btn-primario" href="/cursos/ia-para-presupuestar-y-conseguir-clientes">Ver el curso de IA para presupuestar</a>
+      </div>
+      <div class="consola" aria-hidden="true">
+        <div><span class="u">Vos:</span> Visité una casa de 80 m². Cambio de tablero, 6 bocas nuevas, 2 tomas de pared.</div>
+        <div><span class="a">Asistente:</span> Armé el presupuesto con <span class="k">3 ítems</span>: tablero y protecciones, circuitos nuevos y mano de obra. Separé materiales de mano de obra y dejé la validez del precio en 15 días.</div>
+        <div><span class="u">Vos:</span> Verificá la sección de cables antes de enviarlo.</div>
+        <div><span class="a">Asistente:</span> Revisalo con la norma vigente y con tu criterio profesional. Te marco los puntos para confirmar.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="wrap">
+      <p class="eyebrow">Testimonios</p>
+      <h2>Lo que cuentan los egresados</h2>
+      <div class="testimonios">
+        <blockquote class="testimonio"><p>"Hice el curso de electricidad sin saber nada. A los tres meses ya estaba haciendo instalaciones chicas y presupuestando con la plantilla que armamos en clase."</p><footer>Martín R., egresado de Electricidad domiciliaria</footer></blockquote>
+        <blockquote class="testimonio"><p>"Lo que más me sirvió fue el módulo de IA. Ahora respondo consultas y mando presupuestos en minutos y no se me pierde ningún cliente."</p><footer>Laura G., egresada de Carpintería</footer></blockquote>
+        <blockquote class="testimonio"><p>"Los docentes trabajan en lo que enseñan. Se nota cuando te muestran los errores reales que se cometen en obra."</p><footer>Diego S., egresado de Soldadura</footer></blockquote>
+      </div>
+      <p class="nota-demo" style="margin-top:14px">Testimonios ficticios de un proyecto de demostración.</p>
+    </div>
+  </section>
+
+  <section class="seccion clara">
+    <div class="wrap">
+      <p class="eyebrow">Dudas</p>
+      <h2>Preguntas frecuentes</h2>
+      <div class="faq">
+        {faq.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion oscura" id="reservar">
+    <div class="wrap cierre-form">
+      <div>
+        <p class="eyebrow">Inscripción</p>
+        <h2>Reservá tu lugar</h2>
+        <p class="lead">Dejá tus datos y te escribimos en menos de 48 horas hábiles con fechas, aranceles y todo lo que necesitás saber.</p>
+        <a class="btn btn-borde btn-chico" href={waLink('Hola, quiero consultar por los cursos de OficIA')} target="_blank" rel="noopener">Prefiero escribir por WhatsApp</a>
+      </div>
+      <Formulario />
+    </div>
+  </section>
+</Base>

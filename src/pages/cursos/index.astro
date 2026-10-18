@@ -1,0 +1,77 @@
+---
+import Base from '../../layouts/Base.astro';
+import CursoCard from '../../components/CursoCard.astro';
+import { CURSOS, OFICIOS } from '../../data/cursos';
+import { waLink } from '../../data/site';
+const modalidades = ['Presencial', 'Híbrido', 'Online en vivo'].filter((m) => CURSOS.some((c) => c.modalidad === m));
+---
+<Base
+  titulo="Cursos de oficios | OficIA"
+  descripcion="Siete cursos de oficios con práctica en taller: electricidad, plomería y gas, soldadura, carpintería, refrigeración, construcción e IA para presupuestar."
+>
+  <section class="cabecera">
+    <div class="wrap">
+      <h1>Nuestros cursos</h1>
+      <p class="lead">Formación práctica con docentes en actividad. Filtrá por oficio o por modalidad y encontrá tu próxima cursada.</p>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="wrap">
+      <div class="filtros" id="filtros">
+        <div class="chips" data-grupo="oficio">
+          <span class="rotulo">Oficio</span>
+          <button class="chip" type="button" data-valor="" aria-pressed="true">Todos</button>
+          {OFICIOS.map((o) => <button class="chip" type="button" data-valor={o} aria-pressed="false">{o}</button>)}
+        </div>
+        <div class="chips" data-grupo="modalidad">
+          <span class="rotulo">Modalidad</span>
+          <button class="chip" type="button" data-valor="" aria-pressed="true">Todas</button>
+          {modalidades.map((m) => <button class="chip" type="button" data-valor={m} aria-pressed="false">{m}</button>)}
+        </div>
+      </div>
+
+      <div class="grilla" id="grilla-cursos">
+        {CURSOS.map((c) => <CursoCard curso={c} />)}
+      </div>
+      <p class="vacio" id="vacio">No hay cursos con esa combinación. Probá con otro filtro.</p>
+
+      <div class="ayuda">
+        <p>¿No sabés por cuál empezar? Escribinos por WhatsApp y te orientamos.</p>
+        <a class="btn btn-primario btn-chico" href={waLink('Hola, quiero que me ayuden a elegir un curso en OficIA')} target="_blank" rel="noopener">Escribir por WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const estado: Record<string, string> = { oficio: '', modalidad: '' };
+    const tarjetas = Array.from(document.querySelectorAll<HTMLElement>('#grilla-cursos .curso'));
+    const vacio = document.getElementById('vacio');
+    function aplicar() {
+      let visibles = 0;
+      tarjetas.forEach((t) => {
+        const ok =
+          (!estado.oficio || t.dataset.oficio === estado.oficio) &&
+          (!estado.modalidad || t.dataset.modalidad === estado.modalidad);
+        t.style.display = ok ? '' : 'none';
+        if (ok) visibles++;
+      });
+      if (vacio) vacio.style.display = visibles ? 'none' : 'block';
+    }
+    document.querySelectorAll<HTMLElement>('.chips').forEach((grupo) => {
+      grupo.addEventListener('click', (e) => {
+        const b = (e.target as HTMLElement).closest('.chip') as HTMLButtonElement | null;
+        if (!b) return;
+        grupo.querySelectorAll('.chip').forEach((x) => x.setAttribute('aria-pressed', 'false'));
+        b.setAttribute('aria-pressed', 'true');
+        estado[grupo.dataset.grupo!] = b.dataset.valor ?? '';
+        aplicar();
+      });
+    });
+    const p = new URLSearchParams(location.search).get('oficio');
+    if (p) {
+      const b = document.querySelector<HTMLButtonElement>(`.chips[data-grupo="oficio"] .chip[data-valor="${CSS.escape(p)}"]`);
+      b?.click();
+    }
+  </script>
+</Base>

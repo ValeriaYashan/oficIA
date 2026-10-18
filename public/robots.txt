@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /
+
+# Sitio de demostración: bloqueado por defecto.
+# Para permitir indexación, cambiá "indexar" a true en src/data/site.ts
+# y reemplazá este archivo por: Allow: /  y  Sitemap: https://oficia.valeriayashan.com.ar/sitemap-index.xml

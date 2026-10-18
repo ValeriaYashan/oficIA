@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import { NOTAS, type Nota } from '../../data/notas';
+
+export function getStaticPaths() {
+  return NOTAS.map((nota) => ({ params: { slug: nota.slug }, props: { nota } }));
+}
+const { nota } = Astro.props as { nota: Nota };
+---
+<Base titulo={`${nota.titulo} | OficIA`} descripcion={nota.resumen}>
+  <section class="cabecera">
+    <div class="wrap">
+      <p class="migas"><a href="/novedades">Novedades</a> / {nota.categoria}</p>
+      <h1>{nota.titulo}</h1>
+    </div>
+  </section>
+  <section class="seccion">
+    <div class="wrap articulo">
+      {nota.cuerpo.map((p) => <p>{p}</p>)}
+      <p style="margin-top:36px"><a class="btn btn-primario btn-chico" href="/cursos">Ver los cursos</a></p>
+    </div>
+  </section>
+</Base>

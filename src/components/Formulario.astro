@@ -1,0 +1,90 @@
+---
+import { CURSOS } from '../data/cursos';
+const { completo = false, cursoPreseleccionado = '' } = Astro.props;
+const clave = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '';
+---
+<form class="form" id="form-inscripcion" novalidate data-clave={clave}>
+  <label class="oculto" aria-hidden="true">No completar <input type="text" name="botcheck" tabindex="-1" autocomplete="off" /></label>
+
+  <label>Nombre y apellido
+    <input type="text" name="nombre" required autocomplete="name" />
+  </label>
+  <div class="fila">
+    <label>Correo
+      <input type="email" name="correo" required autocomplete="email" />
+    </label>
+    <label>Teléfono con WhatsApp
+      <input type="tel" name="telefono" required autocomplete="tel" />
+    </label>
+  </div>
+  <label>Curso de interés
+    <select name="curso" required>
+      <option value="">Elegí un curso</option>
+      {CURSOS.map((c) => <option value={c.nombre} selected={c.nombre === cursoPreseleccionado}>{c.nombre}</option>)}
+    </select>
+  </label>
+  {completo && (
+    <label>Consulta o mensaje (opcional)
+      <textarea name="mensaje" rows="4"></textarea>
+    </label>
+  )}
+  <label class="check">
+    <input type="checkbox" name="privacidad" required />
+    <span>Acepto la <a href="/privacidad">política de privacidad</a>.</span>
+  </label>
+  <button class="btn btn-primario" type="submit">{completo ? 'Enviar mi inscripción' : 'Quiero inscribirme'}</button>
+  <p class="form-estado" role="status" aria-live="polite"></p>
+</form>
+
+<script>
+  const form = document.getElementById('form-inscripcion') as HTMLFormElement | null;
+  if (form) {
+    const estado = form.querySelector('.form-estado') as HTMLElement;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      estado.className = 'form-estado';
+      estado.textContent = '';
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      const datos = new FormData(form);
+      if (datos.get('botcheck')) return;
+      const clave = form.dataset.clave;
+      if (!clave) {
+        estado.className = 'form-estado error';
+        estado.textContent = 'El formulario todavía no está conectado a un servicio de envío. Escribinos por WhatsApp mientras tanto.';
+        return;
+      }
+      const boton = form.querySelector('button[type=submit]') as HTMLButtonElement;
+      boton.disabled = true;
+      try {
+        const payload = {
+          access_key: clave,
+          subject: 'Nueva inscripción en OficIA: ' + datos.get('curso'),
+          from_name: 'OficIA',
+          nombre: datos.get('nombre'),
+          email: datos.get('correo'),
+          telefono: datos.get('telefono'),
+          curso: datos.get('curso'),
+          mensaje: datos.get('mensaje') || '',
+        };
+        const r = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const j = await r.json();
+        if (!j.success) throw new Error(j.message || 'Error');
+        form.reset();
+        estado.className = 'form-estado ok';
+        estado.textContent = 'Gracias. Recibimos tu consulta y te escribimos en menos de 48 horas hábiles.';
+      } catch {
+        estado.className = 'form-estado error';
+        estado.textContent = 'No pudimos enviar el formulario. Probá de nuevo o escribinos por WhatsApp.';
+      } finally {
+        boton.disabled = false;
+      }
+    });
+  }
+</script>

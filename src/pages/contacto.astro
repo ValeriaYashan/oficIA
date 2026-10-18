@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import Formulario from '../components/Formulario.astro';
+import { SITE, waLink } from '../data/site';
+---
+<Base
+  titulo="Inscripción y contacto | OficIA"
+  descripcion="Inscribite a un curso de OficIA o escribinos para consultar fechas, aranceles y modalidades."
+>
+  <section class="cabecera">
+    <div class="wrap">
+      <h1>Inscribite o consultanos</h1>
+      <p class="lead">Completá el formulario y te respondemos en menos de 48 horas hábiles.</p>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="wrap contacto-grid">
+      <Formulario completo />
+      <aside class="datos">
+        <h3>Datos de contacto</h3>
+        <p><b>WhatsApp</b><br /><a href={waLink('Hola, quiero consultar por los cursos de OficIA')} target="_blank" rel="noopener">Escribinos por WhatsApp</a></p>
+        <p><b>Dirección de ejemplo</b><br />{SITE.direccion}</p>
+        <p><b>Horarios de atención de ejemplo</b><br />{SITE.horarios}</p>
+        <iframe title="Mapa de ejemplo" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps?q=San+Fernando,+Buenos+Aires&output=embed"></iframe>
+        <p class="nota-demo" style="color:#9ea4aa;margin-top:10px">Datos de contacto ficticios.</p>
+      </aside>
+    </div>
+  </section>
+</Base>
